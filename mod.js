@@ -26,6 +26,22 @@
         return {x: posx, y: posy};
     }
 
+    // get the touch position
+    const getTouchPos = (ev) => {
+        let posx = 0;
+        let posy = 0;
+        const evt = ev.touches[0]
+        if (evt.pageX || evt.pageY) {
+            posx = evt.pageX;
+            posy = evt.pageY;
+        }
+        else if (evt.clientX || evt.clientY) 	{
+            posx = evt.clientX + body.scrollLeft + docEl.scrollLeft;
+            posy = evt.clientY + body.scrollTop + docEl.scrollTop;
+        }
+        return {x: posx, y: posy};
+    }
+
     // mousePos: current mouse position
     // cacheMousePos: previous mouse position
     // lastMousePos: last last recorded mouse position (at the time the last image was shown)
@@ -33,6 +49,8 @@
     
     // update the mouse position
     window.addEventListener('mousemove', ev => mousePos = getMousePos(ev));
+
+    window.addEventListener('touchmove', ev => mousePos = getTouchPos(ev))
     
     // gets the distance from the current mouse position to the last recorded mouse position
     const getMouseDistance = () => MathUtils.distance(mousePos.x,mousePos.y,lastMousePos.x,lastMousePos.y);
